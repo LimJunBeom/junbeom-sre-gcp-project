@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Survey System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>📊 Simple Survey System</h1>
+                <p>Share your feedback and help us improve our services</p>
+            </div>
+
+            <form id="survey-form">
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email address">
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Age Group</label>
+                    <select id="age" name="age">
+                        <option value="">Select your age group</option>
+                        <option value="18-25">18-25 years</option>
+                        <option value="26-35">26-35 years</option>
+                        <option value="36-45">36-45 years</option>
+                        <option value="46-55">46-55 years</option>
+                        <option value="55+">55+ years</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="satisfaction">Overall Satisfaction *</label>
+                    <select id="satisfaction" name="satisfaction" required>
+                        <option value="">Select your satisfaction level</option>
+                        <option value="1">Very Dissatisfied (1 star)</option>
+                        <option value="2">Dissatisfied (2 stars)</option>
+                        <option value="3">Neutral (3 stars)</option>
+                        <option value="4">Satisfied (4 stars)</option>
+                        <option value="5">Very Satisfied (5 stars)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="feedback">Additional Feedback</label>
+                    <textarea id="feedback" name="feedback"
+                        placeholder="Share your thoughts, suggestions, or comments..."></textarea>
+                </div>
+
+                <button type="submit" class="btn">Submit Survey</button>
+            </form>
+
+            <div class="nav-links">
+                <a href="results.html">📈 View Results</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
