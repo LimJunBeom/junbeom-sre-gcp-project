@@ -15,12 +15,9 @@ echo "🚀 GCP Simple Survey System Deployment Started..."
 
 # 1. Build Docker Image
 echo "📦 Building Docker Image..."
-cd backend
-docker build -t $IMAGE_NAME .
+gcloud builds submit --tag $IMAGE_NAME -f backend/Dockerfile .
 
-# 2. Push Image to GCR
-echo "📤 Pushing Image to GCR..."
-docker push $IMAGE_NAME
+# 2. Image is already pushed to GCR by gcloud builds
 
 # 3. Deploy to Cloud Run
 echo "☁️ Deploying to Cloud Run..."

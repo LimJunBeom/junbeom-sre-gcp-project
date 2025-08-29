@@ -108,17 +108,34 @@ python app.py
 
 ### 3. Deployment
 
-#### Option 1: Script Deployment (Recommended)
+#### Option 1: Free Tier Deployment (Recommended)
 
 ```bash
-# Update PROJECT_ID in deploy.sh
-vim deploy.sh
+# Update PROJECT_ID in deploy-free-tier.sh
+vim deploy-free-tier.sh
 
-# Make script executable
-chmod +x deploy.sh
+# Run deployment (no local Docker required)
+./deploy-free-tier.sh
+```
 
-# Run deployment
-./deploy.sh
+#### Option 2: Manual Deployment
+
+```bash
+# Set project and region
+gcloud config set project YOUR_PROJECT_ID
+gcloud config set run/region us-central1
+
+# Enable APIs
+gcloud services enable run.googleapis.com
+gcloud services enable firestore.googleapis.com
+gcloud services enable cloudbuild.googleapis.com
+
+# Build and deploy
+gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/simple-survey-system -f backend/Dockerfile .
+gcloud run deploy simple-survey-system \
+  --image gcr.io/YOUR_PROJECT_ID/simple-survey-system \
+  --allow-unauthenticated \
+  --region us-central1
 ```
 
 #### Option 2: Terraform Deployment
@@ -138,14 +155,37 @@ terraform apply
 
 ### 4. Firestore Database Setup
 
-Create Firestore database manually in GCP Console or use Terraform:
+Create Firestore database manually in GCP Console:
 
 ```bash
 # Manual setup in GCP Console:
-# - Region: us-central1
-# - Mode: Native mode
-# - Delete protection: Disabled (for free tier)
+# - Go to Firestore → Create database
+# - Select 'Native mode'
+# - Choose 'us-central1' region (Always Free)
+# - Disable delete protection (for free tier)
 ```
+
+### 5. Free Tier Checklist
+
+✅ **Region Settings**
+- Cloud Run: us-central1
+- Firestore: us-central1
+
+✅ **Cloud Run Configuration**
+- Memory: 512Mi
+- CPU: 1 vCPU
+- Max instances: 10
+- Min instances: 0 (prevents idle charges)
+- Concurrency: 80
+
+✅ **Required APIs**
+- Cloud Run Admin API
+- Cloud Build API
+- Firestore API
+- Artifact Registry API
+
+✅ **IAM Permissions**
+- Cloud Run service account needs `roles/datastore.user`
 
 ## 🔧 Environment Variables
 
