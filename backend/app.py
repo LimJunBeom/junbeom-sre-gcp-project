@@ -21,7 +21,7 @@ def submit_survey():
             'name': data.get('name', '').strip(),
             'email': data.get('email', '').strip(),
             'age': data.get('age', '').strip() or None,
-            'satisfaction': data.get('satisfaction', '').strip(),
+            'satisfaction': str(data.get('satisfaction', '')).strip(),
             'feedback': data.get('feedback', '').strip() or None
         }
         
