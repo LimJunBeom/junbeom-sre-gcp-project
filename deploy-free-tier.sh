@@ -6,7 +6,7 @@
 set -e
 
 # Environment Variables
-PROJECT_ID="your-project-id"  # Change to your actual project ID
+PROJECT_ID="shaped-canyon-470500-d9"  # Change to your actual project ID
 REGION="us-central1"
 SERVICE_NAME="simple-survey-system"
 IMAGE_NAME="gcr.io/$PROJECT_ID/$SERVICE_NAME"
