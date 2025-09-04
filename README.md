@@ -10,6 +10,17 @@ A lightweight survey system built on Google Cloud Platform using Cloud Run and F
 - **Free Tier Optimized**: Designed to stay within GCP Always Free limits
 - **Modern UI**: Responsive design with beautiful gradients and animations
 
+## 📸 Screenshots
+
+### Survey Form
+![Survey Form](docs/screenshots/GCP_Survey_System_Screenshot_1.png)
+
+### Survey Form with Data Input
+![Survey Form with Data Input](docs/screenshots/GCP_Survey_System_Screenshot_2.png)
+
+### Survey Results Dashboard
+![Survey Results Dashboard](docs/screenshots/GCP_Survey_System_Screenshot_3.png)
+
 ## 🏗️ Architecture
 
 ```
@@ -44,14 +55,11 @@ A lightweight survey system built on Google Cloud Platform using Cloud Run and F
 ## 📁 Project Structure
 
 ```
-gcp-survey-app/
+junbeom-sre-gcp-project/
 │
 ├── backend/                # Flask API (survey response storage, results retrieval)
 │   ├── app.py               # Main Flask application
-│   ├── requirements.txt     # Python packages
-│   ├── Dockerfile           # Cloud Run deployment
-│   ├── firestore_service.py # Firestore integration logic
-│   └── .dockerignore        # Docker exclude files
+│   └── firestore_service.py # Firestore integration logic
 │
 ├── frontend/               # Simple web forms
 │   ├── index.html           # Survey input form
@@ -61,10 +69,15 @@ gcp-survey-app/
 │   └── js/
 │       └── app.js
 │
+├── docs/                   # Documentation and screenshots
+│   └── screenshots/         # Application screenshots
+│
 ├── infra/                  # Optional (Terraform IaC)
 │   └── main.tf              # Cloud Run + Firestore resource definitions
 │
-├── deploy.sh               # Deployment script
+├── Dockerfile              # Cloud Run deployment (root level)
+├── requirements.txt        # Python packages (root level)
+├── deploy-free-tier.sh     # Free tier deployment script
 └── README.md               # Project documentation
 ```
 
@@ -111,10 +124,15 @@ python app.py
 #### Option 1: Free Tier Deployment (Recommended)
 
 ```bash
-# Update PROJECT_ID in deploy-free-tier.sh
-vim deploy-free-tier.sh
+# Clone the repository
+git clone https://github.com/jaylim/junbeom-sre-gcp-project.git
+cd junbeom-sre-gcp-project
+
+# Update PROJECT_ID in deploy-free-tier.sh (already configured)
+# PROJECT_ID="shaped-canyon-470500-d9"
 
 # Run deployment (no local Docker required)
+chmod +x deploy-free-tier.sh
 ./deploy-free-tier.sh
 ```
 
@@ -131,11 +149,15 @@ gcloud services enable firestore.googleapis.com
 gcloud services enable cloudbuild.googleapis.com
 
 # Build and deploy
-gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/simple-survey-system -f backend/Dockerfile .
+gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/simple-survey-system .
 gcloud run deploy simple-survey-system \
   --image gcr.io/YOUR_PROJECT_ID/simple-survey-system \
   --allow-unauthenticated \
-  --region us-central1
+  --region us-central1 \
+  --memory 512Mi \
+  --cpu 1 \
+  --max-instances 10 \
+  --min-instances 0
 ```
 
 #### Option 2: Terraform Deployment
@@ -213,22 +235,28 @@ Create Firestore database manually in GCP Console:
 
 ```bash
 # Health check
-curl https://your-service-url/health
+curl https://simple-survey-system-937995954237.us-central1.run.app/health
 
 # Submit survey (POST)
-curl -X POST https://your-service-url/api/submit-survey \
+curl -X POST https://simple-survey-system-937995954237.us-central1.run.app/api/submit-survey \
   -H "Content-Type: application/json" \
   -d '{"name":"Test User","email":"test@example.com","satisfaction":"5"}'
 
 # Get results
-curl https://your-service-url/api/survey-results
+curl https://simple-survey-system-937995954237.us-central1.run.app/api/survey-results
 ```
+
+### Live Demo
+
+🌐 **Live Application**: https://simple-survey-system-937995954237.us-central1.run.app/
+
+- **Survey Form**: https://simple-survey-system-937995954237.us-central1.run.app/
+- **Results Page**: https://simple-survey-system-937995954237.us-central1.run.app/results
 
 ### Local Testing
 
 ```bash
-# Build Docker image
-cd backend
+# Build Docker image (from root directory)
 docker build -t simple-survey-system .
 
 # Run locally
@@ -249,14 +277,22 @@ docker run -p 8080:8080 simple-survey-system
 1. **Firestore Connection Error**
    - Check service account permissions
    - Verify project ID configuration
+   - Ensure Firestore database is created in us-central1 region
 
 2. **Cloud Run Deployment Failure**
    - Verify Docker image build
    - Check memory/CPU limits
+   - Ensure Dockerfile is in root directory
 
 3. **Free Tier Exceeded**
    - Monitor usage in GCP Console
    - Set resource limits
+   - Check billing alerts
+
+4. **Build Context Issues**
+   - Ensure Dockerfile is in root directory
+   - Verify all required files (requirements.txt, backend/, frontend/) are present
+   - Use `gcloud builds submit` without `-f` flag for this Cloud Shell version
 
 ## 📝 License
 
