@@ -13,11 +13,11 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY . .
+# Copy backend application code
+COPY backend/ .
 
 # Copy frontend files
-COPY ../frontend ./frontend
+COPY frontend/ ./frontend
 
 # Expose port for Cloud Run
 EXPOSE 8080

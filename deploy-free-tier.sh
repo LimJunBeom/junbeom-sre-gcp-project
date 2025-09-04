@@ -28,7 +28,7 @@ gcloud services enable artifactregistry.googleapis.com
 
 # 3. Build and push image using Cloud Build
 echo "📦 Building and pushing Docker image..."
-gcloud builds submit --tag $IMAGE_NAME -f backend/Dockerfile .
+gcloud builds submit --tag $IMAGE_NAME -f Dockerfile .
 
 # 4. Deploy to Cloud Run with free tier settings
 echo "☁️ Deploying to Cloud Run (Free Tier Optimized)..."
